@@ -1,0 +1,118 @@
+/* avatar */
+.thumb-cover{
+  width:50px;
+  height:50px;
+  background-size:cover;
+  border-radius: 50px;
+  overflow: hidden;
+  display: inline-block;
+  position: absolute;
+  top: 16px;
+  left: 16px;
+}
+.item-avatar.item-avatar-big .item-content{
+  padding-left: 80px;
+}
+.singal-thumb.thumb-big-left{
+  margin-left:0 !important;
+}
+.thumb-cover .thumb-big-left{
+  width:50px;
+  height:50px;
+  background-size:cover;
+  margin-left: -25px;
+}
+.thumb-cover .thumb-small-top{
+  width:25px;
+  height:25px;
+  background-size:cover;
+  margin-top: -50px;
+  margin-left: 25px;
+}
+.thumb-cover .thumb-small-bottom{
+  width:25px;
+  height:25px;
+  background-size:cover;
+  margin-top: 0px;
+  margin-left: 25px;
+}
+.image-cover{
+  margin:0 auto;
+  width:80px;
+  height:80px;
+  background-size:cover;
+  border-radius: 80px;
+  overflow: hidden;
+}
+.thumb-big-left{
+  width:80px;
+  height:80px;
+  background-size:cover;
+  margin-left: -40px;
+}
+.thumb-small-top{
+  width:40px;
+  height:40px;
+  background-size:cover;
+  margin-top: -80px;
+  margin-left: 40px;
+}
+.thumb-small-bottom{
+  width:40px;
+  height:40px;
+  background-size:cover;
+  margin-top: 0px;
+  margin-left: 40px;
+}
+/* message bubble */
+.chat-message .item{
+  border:none;
+}
+.message-bubble {
+  display: inline-block;
+  padding: 10px;
+  border-radius: 14px;
+  max-width: 200px;
+}
+.message-bubble.positive-bg{
+  color: white !important;
+  text-align: left;
+}
+.message-bubble:before {
+  position: absolute;
+  left: 64px;
+  content: '';
+  width: 0;
+  height: 0;
+  border-width: 7px 14px 7px 0;
+  border-style: solid;
+  border-color: transparent #f8f8f8 transparent;
+}
+.item-avatar-right .message-bubble:before {
+  left: auto;
+  right: 64px;
+  border-width: 7px 0 7px 14px;
+  border-color: transparent #387ef5 transparent;
+}
+/* cover image */
+.cover-image{
+  min-width: 40px;
+  min-height: 40px;
+  background-size:cover;
+  border-radius:50%;
+}
+/* auth */
+.item-input{
+  padding-right:10px;
+}
+/* groups */
+.groups .item-content{
+  padding-right: 16px;
+}
+/* chats tab */
+.chat-list{
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  line-height: 36px;
+}

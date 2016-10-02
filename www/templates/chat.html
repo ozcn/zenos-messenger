@@ -1,0 +1,36 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view hide-tabs>
+  <ion-nav-bar class="bar-stable">
+      <ion-nav-back-button>
+      </ion-nav-back-button>
+      <ion-nav-title>
+        <a ng-href="#/tab/{{linkType}}/{{activity.$id}}/detail" style="text-decoration:none;">
+              {{activity.name}}
+              <i class="icon ion-ios-arrow-right"></i>
+        </a>
+    </ion-nav-title>
+    </ion-nav-bar>
+  <ion-content class="padding">
+    <ion-list class="chat-message">
+      <ion-item ng-repeat="message in messages" class="item-text-wrap" ng-class="{'item-avatar':message.userId!=currentUser.$id,'item-avatar-right text-right': message.userId==currentUser.$id}">
+        <img ng-src="{{message.face}}">
+        <p class="message-bubble stable-bg" ng-class="{'positive-bg': message.userId==currentUser.$id}">{{message.message}}</p>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+  <form name="chatForm">
+    <ion-footer-bar class="bar-light item-input-inset">
+      <label class="item-input-wrapper">
+        <input  type="text" placeholder="Type a message" ng-model="chatText" ng-minlength="2" ng-required="true">
+      </label>
+      <button class="button button-clear" ng-click="sendChat(chatText); chatText = null" ng-disabled="chatForm.$invalid">
+        Send
+      </button>
+    </ion-footer-bar>
+  </form>
+</ion-view>

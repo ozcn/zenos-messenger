@@ -1,0 +1,38 @@
+<ion-view title="{{activity.name}}" hide-tabs>
+  <ion-nav-bar class="bar-stable">
+    <ion-nav-back-button>
+    </ion-nav-back-button>
+  </ion-nav-bar>
+
+  <ion-content>
+    <div style="height: 50px"></div>
+    <div class="text-center">
+        <div class="image-cover">
+          <div ng-repeat="thumb in thumbs"
+               ng-class="{'singal-thumb':thumbs.length==1, 'thumb-big-left': $index==0, 'thumb-small-top': $index==1, 'thumb-small-bottom': $index==2}"
+               style="background-image:url('{{thumb}}');">
+          </div>
+        </div>
+        <h3>{{activity.name}}</h3>
+        <p am-time-ago="activity.lastUpdate"></p>
+        <div style="height: 20px"></div>
+    </div>
+    <ion-list ng-if="activity">
+      <ion-item class="item-divider"></ion-item>
+      <ion-item class="item-icon-left"><i class="icon positive ion-ios-bell-outline"></i>Notifications
+        <span class="item-note">
+          On
+        </span>
+      </ion-item>
+      <ion-item class="item-icon-left item-icon-right"><i class="icon positive ion-ios-compose-outline"></i>Nicknames<i class="icon ion-chevron-right icon-accessory"></i></ion-item>
+      <ion-item class="item-divider"></ion-item>
+      <ion-item class="item-icon-left" ng-click="newGroup()"><i class="icon positive ion-ios-plus-empty"></i>{{chatMember.length>2 ? 'Add People' : 'Create Group'}}</ion-item>
+      <ion-item ng-if="chatMember.length>2" ng-repeat="user in chatMember" class="item-avatar item-icon-right">
+        <img ng-src="{{user.face}}">
+        <h2>{{user.name}}</h2>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+      </ion-item>
+
+    </ion-list>
+  </ion-content>
+</ion-view>

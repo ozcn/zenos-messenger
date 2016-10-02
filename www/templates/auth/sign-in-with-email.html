@@ -1,0 +1,41 @@
+<ion-view title="Sign in with Email">
+  <ion-nav-bar class="bar-stable">
+      <ion-nav-back-button>
+      </ion-nav-back-button>
+    </ion-nav-bar>
+    <ion-content scroll="false">
+        <form novalidate name="signInForm" ng-submit="signInForm.$valid && signInWithEmail(user)">
+        <ion-list>
+            <ion-item class="item-input">
+              <input name="txtemail" type="email" ng-model="$parent.user.email" placeholder="Email"
+              ng-minlength="5"
+              required />
+              <span class="item-note assertive" ng-messages="signInForm.txtemail.$error" ng-if="signInForm.$submitted">
+                <span ng-message="required">* Email is required.</span>
+                <span ng-message="email">This is not an email.</span>
+                <span ng-message="minlength">5 characters at least.</span>
+              </span>
+            </ion-item>
+
+            <ion-item class="item-input">
+              <input name="txtPassword" type="password" ng-model="$parent.user.password" placeholder="Password"
+              ng-minlength="6"
+              required />
+              <span class="item-note assertive" ng-messages="signInForm.txtPassword.$error" ng-if="signInForm.$submitted">
+                <span ng-message="required">* Password is required.</span>
+                <span ng-message="minlength">6 characters at least.</span>
+              </span>
+            </ion-item>
+
+        </ion-list>
+        <div class="padding">
+            <input type="submit" class="button button-block button-dark" value="Sign in" />
+        </div>
+        </form>
+    </ion-content>
+
+    <ion-footer-bar>
+        <a class="button button-clear button-stable" ng-click="newSignup()">Sign Up</a>
+        <a class="button button-clear button-stable" ng-click="newPassword()">Forgot Password</a>
+    </ion-footer-bar>
+</ion-view>

@@ -1,0 +1,19 @@
+<ion-modal-view>
+  <ion-header-bar class="bar-stable">
+      <h1 class="title">New Message</h1>
+      <button class="button button-clear button-positive" ng-click="closeModal()">Cancel</button>
+  </ion-header-bar>
+  <ion-content>
+    <ion-list>
+      <ion-item class="item-avatar item-icon-right"
+                ng-repeat="user in users"
+                ng-if="user.$id != currentUser.$id"
+                type="item-text-wrap"
+                href="#/tab/{{linkType}}/{{user.$id}}">
+        <img ng-src="{{user.face}}">
+        <h2>{{user.name}}</h2>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-modal-view>

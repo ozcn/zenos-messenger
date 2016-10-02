@@ -1,0 +1,15 @@
+<ion-view hide-nav-bar="true">
+    <ion-content class="padding text-center" scroll="false">
+        <div style="height: 50px"></div>
+        <img src="img/logo.svg" style="width: 70px; height: auto">
+        <h2>Ionic Starter Firebase</h2>
+        <p style="padding-left:40px;padding-right:40px;">Power backend and quickly develop apps with Firebase.</p>
+        <div style="height: 15px"></div>
+        <div style="padding-left:40px;padding-right:40px;">
+          <button class="button button-block button-dark icon ion-social-twitter" ng-click="signIn('twitter')"> Sign in with Twitter</button>
+          <button class="button button-block button-dark icon ion-social-facebook" ng-click="signIn('facebook')"> Sign in with Facebook</button>
+          <button class="button button-block button-dark icon ion-social-google" ng-click="signIn('google')"> Sign in with Google</button>
+          <button class="button button-block button-clear button-stable" ui-sref="sign-in-with-email">Sign in with Email</button>
+        </div>
+    </ion-content>
+</ion-view>

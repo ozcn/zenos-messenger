@@ -1,0 +1,19 @@
+<ion-view view-title="Account" show-tabs>
+  <ion-content>
+    <div style="height: 50px"></div>
+    <div class="text-center">
+        <div class="cover-image" style="margin:0 auto;width:90px;height:90px;background-image:url({{currentUser.face}});"></div>
+        <h3>{{currentUser.name}}</h3>
+        <p>{{currentUser.provider}}</p>
+        <div style="height: 20px"></div>
+    </div>
+    <ion-list>
+    <ion-item class="item-divider"></ion-item>
+    <ion-item class="item-icon-right">Report a Problem<i class="icon ion-chevron-right icon-accessory"></i></ion-item>
+    <ion-item class="item-icon-right">Help<i class="icon ion-chevron-right icon-accessory"></i></ion-item>
+    <ion-item class="item-icon-right">Privacy & Terms<i class="icon ion-chevron-right icon-accessory"></i></ion-item>
+    <ion-item class="item-divider"></ion-item>
+    <ion-item class="positive" ng-click="signOut()">logout</ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

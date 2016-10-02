@@ -1,0 +1,43 @@
+<ion-modal-view>
+    <ion-header-bar class="bar-stable">
+        <button class="button button-clear button-positive" ng-click="closeModal()">Cancel</button>
+        <h1 class="title">Sign up</h1>
+    </ion-header-bar>
+    <ion-content scroll="false">
+        <form novalidate name="signupForm" ng-submit="signupForm.$valid && signUpWithEmail(user)">
+        <ion-list>
+            <ion-item class="item-input">
+                <input name="txtname" type="text" placeholder="Display Name" ng-model="$parent.user.displayName"
+                ng-minlength="5"
+                required />
+                <span class="item-note assertive" ng-messages="signupForm.txtname.$error" ng-if="signupForm.$submitted">
+                  <span ng-message="required">* Name is required.</span>
+                  <span ng-message="minlength">5 characters at least.</span>
+                </span>
+            </ion-item>
+            <ion-item class="item-input">
+                <input name="txtemail" type="email" placeholder="Email" ng-model="$parent.user.email"
+                ng-minlength="5"
+                required />
+                <span class="item-note assertive" ng-messages="signupForm.txtemail.$error" ng-if="signupForm.$submitted">
+                  <span ng-message="required">* Email is required.</span>
+                  <span ng-message="email">This is not an email.</span>
+                  <span ng-message="minlength">5 characters at least.</span>
+                </span>
+            </ion-item>
+            <ion-item class="item-input">
+                <input name="txtPassword" type="password" placeholder="Password" ng-model="$parent.user.password"
+                ng-minlength="6"
+                required />
+                <span class="item-note assertive" ng-messages="signupForm.txtPassword.$error" ng-if="signupForm.$submitted">
+                  <span ng-message="required">* Password is required.</span>
+                  <span ng-message="minlength">6 characters at least.</span>
+                </span>
+            </ion-item>
+        </ion-list>
+        <div class="padding">
+            <input type="submit" class="button button-block button-dark" value="Sign Up" />
+        </div>
+      </form>
+    </ion-content>
+</ion-modal-view>

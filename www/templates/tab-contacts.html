@@ -1,0 +1,29 @@
+<ion-view view-title="Contscts" show-tabs>
+  <ion-header-bar class="bar-stable item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input type="search" placeholder="Search" ng-model="searchText">
+    </label>
+    <button class="button button-positive button-clear button-icon icon ion-ios-plus-empty" ng-click="showPromptAdd()">
+    </button>
+  </ion-header-bar>
+  <ion-content>
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right"
+                ng-repeat="user in users | filter:searchText"
+                ng-if="user.$id != currentUser.$id"
+                type="item-text-wrap"
+                href="#/tab/contacts/{{user.$id}}">
+        <img ng-src="{{user.face}}">
+        <h2>{{user.name}}</h2>
+        <p ng-if="!user.online" am-time-ago="user.lastOnline"></p>
+        <p ng-if="user.online">Online</p>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+
+        <ion-option-button class="button-assertive" ng-click="remove(user.id)">
+          Delete
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

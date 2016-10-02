@@ -1,0 +1,36 @@
+<ion-view view-title="Groups" show-tabs>
+
+  <ion-header-bar class="bar-stable item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input type="search" placeholder="Search" ng-model="searchText">
+    </label>
+    <button class="button button-positive button-clear button-icon icon ion-ios-plus-empty" ng-click="new_group()">
+    </button>
+  </ion-header-bar>
+
+  <ion-content class="groups">
+    <ion-list type="list-inset"
+              class="text-center"
+              ng-repeat="group in groups | filter:searchText"
+              style="width:50%;float:left;padding:0;"
+              >
+      <ion-item href="#/tab/groups/{{group.$id}}">
+        <div class="image-cover" style="position:initial;top:0;left:0;" ng-init="thumbs = (group.face | split)" >
+           <div ng-repeat="thumb in thumbs"
+                ng-class="{'singal-thumb':thumbs.length==1,'thumb-big-left': $index==0, 'thumb-small-top': $index==1, 'thumb-small-bottom': $index==2}"
+                style="background-image:url('{{thumb}}');">
+           </div>
+         </div>
+         <div style="height: 20px"></div>
+
+        <h2>{{group.name}}</h2>
+        <p am-time-ago="group.lastUpdate"></p>
+      </ion-item>
+      <ion-item class="item-divider">
+        <p>{{group.members}}</p>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+
+</ion-view>
