@@ -25,6 +25,9 @@
   </ion-content>
   <form name="chatForm">
     <ion-footer-bar class="bar-light item-input-inset">
+      <button class="button button-clear" ng-click="openAssetModal()">
+        <i class="icon ion-cash"></i>
+      </button>
       <label class="item-input-wrapper">
         <input  type="text" placeholder="Type a message" ng-model="chatText" ng-minlength="2" ng-required="true">
       </label>

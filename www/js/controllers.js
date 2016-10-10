@@ -23,7 +23,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('ChatCtrl', function($scope, $stateParams, $rootScope,
-  Activities, Messages, Users,
+  Activities, Messages, ModalService, Users,
   chat, messages, members, activity,
   Loading, linkType) {
 
@@ -54,6 +54,14 @@ angular.module('starter.controllers', [])
 
   }
 
+  // asset の送付モーダル画面を開く
+  $scope.openAssetModal = function() {
+    ModalService
+      .init('templates/modal/send-asset.html', $scope)
+      .then(function(modal) {
+        modal.show();
+      });
+  };
 
 })
 
