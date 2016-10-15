@@ -1,4 +1,10 @@
 {
   "name": "ionic-starter-messenger",
-  "app_id": ""
+  "app_id": "",
+  "proxies": [
+    {
+      "path": "/colu_api",
+      "proxyUrl": "http://localhost:3000"
+    }
+  ]
 }
