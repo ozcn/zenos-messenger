@@ -196,6 +196,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services',
           'members': function(chat, Members){
             return Members.get(chat.$id).$loaded();
           },
+          'currentWallets': function(auth, Wallets){
+            return Wallets.all(auth.uid).$loaded(function(wallets){
+              return wallets;
+            });
+          },
+          'membersWallets': function(auth, members, Wallets){
+            var targetUserId;
+            members.some(function(member){
+              if (member.$id !== auth.uid) {
+                targetUserId = member.$id;
+                return true;
+              }
+            });
+
+            return Wallets.all(targetUserId).$loaded(function(wallets){
+              return wallets;
+            });
+          },
           'activity': function(auth, chat, Activities, Users, $stateParams){
             return Activities.get(auth.uid, chat.$id).$loaded(function(activity){
               if(!activity.name){

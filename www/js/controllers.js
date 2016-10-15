@@ -25,7 +25,8 @@ angular.module('starter.controllers', [])
 .controller('ChatCtrl', function($scope, $stateParams, $rootScope,
   Activities, Messages, ModalService, Users,
   chat, messages, members, activity,
-  Loading, linkType) {
+  currentWallets, membersWallets,
+  Loading, linkType, $http) {
 
   // link of chat-detail
   $scope.linkType = linkType;
@@ -36,6 +37,10 @@ angular.module('starter.controllers', [])
 
   // chat members
   $scope.members = members;
+
+  // wallets
+  $scope.currentWallets = currentWallets;
+  $scope.membersWallets = membersWallets;
 
   // user send new message
   $scope.sendChat = function(chatText){
@@ -61,6 +66,41 @@ angular.module('starter.controllers', [])
       .then(function(modal) {
         modal.show();
       });
+  };
+
+  // チャット内の相手 user に財を送る
+  $scope.sendAsset = function(assetNumber){
+    // 財の送り元/先の Wallet
+    // FIXME: 決め打ちで0番目の要素を利用している
+    var fromWallet = $scope.currentWallets[0];
+    var toWallet = $scope.membersWallets[0];
+
+    if (fromWallet.assetId !== toWallet.assetId) {
+      console.error("Does not match assetId");
+      return;
+    }
+
+    var apiJsonData = {
+      fromAddress: fromWallet.$id,
+      toAddress: toWallet.$id,
+      amount: assetNumber,
+      assetId: fromWallet.assetId
+    };
+
+    // TODO services に API を呼び出す処理を移行する
+    $http({
+      method: "POST",
+      url: "/colu_api/send_asset",
+      data: apiJsonData
+    })
+    .success(function(data, status, headers, config){
+      console.log("success");
+      console.log(data, status, headers, config);
+    })
+    .error(function(data, status, headers, config){
+      console.log("error");
+      console.log(data, status, headers, config);
+    });
   };
 
 })
