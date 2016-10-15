@@ -232,6 +232,19 @@ angular.module('starter.services', [])
     all:messages
   };
 })
+.factory('Wallets', function($firebaseArray, $firebaseObject) {
+  var ref = firebase.database().ref().child("wallets");
+
+  return {
+    all: function(userId){
+      return $firebaseArray(ref.child(userId));
+    },
+    get: function(userId, walletAddressId){
+      return $firebaseObject(ref.child(userId + '/' + walletAddressId));
+    }
+  };
+})
+
 .factory('toggleSelection', function() {
   // userObj: { id: 0, name: 'Venkman', face: 'img/venkman.jpg' }
   // selectedList: userObj list array
