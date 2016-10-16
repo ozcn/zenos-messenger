@@ -96,6 +96,9 @@ angular.module('starter.controllers', [])
     .success(function(data, status, headers, config){
       console.log("success");
       console.log(data, status, headers, config);
+
+      $scope.sendChat(assetNumber + " コイン送金しました。");
+      $scope.closeModal();
     })
     .error(function(data, status, headers, config){
       console.log("error");
