@@ -23,10 +23,11 @@ angular.module('starter.controllers', [])
 })
 
 .controller('ChatCtrl', function($scope, $stateParams, $rootScope,
+  $http, $ionicLoading,
   Activities, Messages, ModalService, Users,
   chat, messages, members, activity,
   currentWallets, membersWallets,
-  Loading, linkType, $http) {
+  Loading, linkType) {
 
   // link of chat-detail
   $scope.linkType = linkType;
@@ -87,6 +88,14 @@ angular.module('starter.controllers', [])
       assetId: fromWallet.assetId
     };
 
+    $ionicLoading.show({
+      content: 'Loading',
+      animation: 'fade-in',
+      showBackdrop: true,
+      maxWidth: 200,
+      showDelay: 0
+    });
+
     // TODO services に API を呼び出す処理を移行する
     $http({
       method: "POST",
@@ -97,12 +106,15 @@ angular.module('starter.controllers', [])
       console.log("success");
       console.log(data, status, headers, config);
 
+      $ionicLoading.hide();
       $scope.sendChat(assetNumber + " コイン送金しました。");
       $scope.closeModal();
     })
     .error(function(data, status, headers, config){
       console.log("error");
       console.log(data, status, headers, config);
+
+      $ionicLoading.hide();
     });
   };
 
