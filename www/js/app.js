@@ -360,7 +360,19 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services',
     views: {
       'tab-account': {
         templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
+        controller: 'AccountCtrl',
+        resolve: {
+          'currentWallet': function(auth, Wallets){
+            return Wallets.all(auth.uid).$loaded(function(wallets){
+              if (wallets && wallets.length > 0) {
+                // FIXME 2つ以上ある場合、決め打ちで最初の要素を current として利用している
+                return wallets[0];
+              } else {
+                return {};
+              }
+            });
+          }
+        }
       }
     }
   });

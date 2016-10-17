@@ -363,7 +363,9 @@ activity, members, Chats, Privates, $state, $rootScope) {
   }
 })
 
-.controller('AccountCtrl', function($scope, Auth) {
+.controller('AccountCtrl', function($scope, Auth, currentWallet) {
+  $scope.currentWallet = currentWallet;
+
   $scope.signOut = function (){
     return Auth.$signOut();
   };
