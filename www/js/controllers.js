@@ -69,7 +69,7 @@ angular.module('starter.controllers', [])
       });
   };
 
-  // チャット内の相手 user に財を送る
+  // チャット内の相手 user にコインを送る
   $scope.sendAsset = function(assetNumber){
     // 財の送り元/先の Wallet
     // FIXME: 決め打ちで0番目の要素を利用している
