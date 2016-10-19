@@ -24,9 +24,9 @@ angular.module('starter.controllers', [])
 
 .controller('ChatCtrl', function($scope, $stateParams, $rootScope,
   $http, $ionicLoading,
-  Activities, Messages, ModalService, Users,
+  Activities, Messages, ModalService, Users, Wallets,
   chat, messages, members, activity,
-  currentWallets, membersWallets,
+  currentWallet, membersWallets,
   Loading, linkType) {
 
   // link of chat-detail
@@ -40,7 +40,7 @@ angular.module('starter.controllers', [])
   $scope.members = members;
 
   // wallets
-  $scope.currentWallets = currentWallets;
+  $scope.currentWallet = currentWallet;
   $scope.membersWallets = membersWallets;
 
   // user send new message
@@ -66,6 +66,13 @@ angular.module('starter.controllers', [])
       .init('templates/modal/send-asset.html', $scope)
       .then(function(modal) {
         modal.show();
+
+        // モーダル表示処理は先におこなって、
+        // その裏で currentWallet を最新の状態に更新する
+        Wallets.get($rootScope.currentUser.$id, $scope.currentWallet.$id)
+        .$loaded(function(wallet){
+          $scope.currentWallet = wallet;
+        });
       });
   };
 
@@ -73,7 +80,7 @@ angular.module('starter.controllers', [])
   $scope.sendAsset = function(assetNumber){
     // 財の送り元/先の Wallet
     // FIXME: 決め打ちで0番目の要素を利用している
-    var fromWallet = $scope.currentWallets[0];
+    var fromWallet = $scope.currentWallet;
     var toWallet = $scope.membersWallets[0];
 
     if (fromWallet.assetId !== toWallet.assetId) {

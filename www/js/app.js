@@ -196,9 +196,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services',
           'members': function(chat, Members){
             return Members.get(chat.$id).$loaded();
           },
-          'currentWallets': function(auth, Wallets){
+          'currentWallet': function(auth, Wallets){
             return Wallets.all(auth.uid).$loaded(function(wallets){
-              return wallets;
+              if (wallets && wallets.length > 0) {
+                // FIXME 2つ以上ある場合、決め打ちで最初の要素を current として利用している
+                return wallets[0];
+              } else {
+                return {};
+              }
             });
           },
           'membersWallets': function(auth, members, Wallets){
