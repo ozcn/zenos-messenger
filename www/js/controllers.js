@@ -116,6 +116,14 @@ angular.module('starter.controllers', [])
       $ionicLoading.hide();
       $scope.sendChat(assetNumber + " コイン送金しました。");
       $scope.closeModal();
+
+      Wallets.sendAsset(
+        apiJsonData.amount,
+        $rootScope.currentUser.$id,
+        apiJsonData.fromAddress,
+        $scope.members[1].$id,
+        apiJsonData.toAddress
+      );
     })
     .error(function(data, status, headers, config){
       console.log("error");

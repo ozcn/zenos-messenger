@@ -232,7 +232,7 @@ angular.module('starter.services', [])
     all:messages
   };
 })
-.factory('Wallets', function($firebaseArray, $firebaseObject) {
+.factory('Wallets', function($firebaseArray, $firebaseObject, $q) {
   var ref = firebase.database().ref().child("wallets");
 
   return {
@@ -241,6 +241,41 @@ angular.module('starter.services', [])
     },
     get: function(userId, walletAddressId){
       return $firebaseObject(ref.child(userId + '/' + walletAddressId));
+    },
+    /**
+     * 対象ユーザーへ送金する
+     * @param {Number} amount 送金額
+     * @param {String} fromUserId 送金元の user id
+     * @param {String} fromWalletId 送金元の wallet id
+     * @param {String} toUserId 送金先の user id
+     * @param {String} toWalletId 送金先の wallet id
+     **/
+    sendAsset: function(amount, fromUserId, fromWalletId, toUserId, toWalletId){
+      var deferred1 = $q.defer();
+      var deferred2 = $q.defer();
+
+      this.get(fromUserId, fromWalletId).$loaded()
+      .then(function(fromWallet){
+        fromWallet.amount -= amount;
+        console.log('fromWallet.amount', fromWallet.amount);
+        fromWallet.$save().then(function(){
+          deferred1.resolve(fromWallet);
+        });
+      });
+
+      this.get(toUserId, toWalletId).$loaded()
+      .then(function(toWallet){
+        toWallet.amount += amount;
+        console.log('toWallet.amount', toWallet.amount);
+        toWallet.$save().then(function(){
+          deferred2.resolve(toWallet);
+        });
+      });
+
+      return $q.all([
+        deferred1.promise,
+        deferred2.promise
+      ]);
     }
   };
 })
