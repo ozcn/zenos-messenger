@@ -23,17 +23,17 @@
       </ion-item>
     </ion-list>
   </ion-content>
-  <form name="chatForm">
     <ion-footer-bar class="bar-light item-input-inset">
       <button class="button button-clear" ng-click="openAssetModal()">
         <i class="icon ion-cash"></i>
       </button>
-      <label class="item-input-wrapper">
-        <input  type="text" placeholder="Type a message" ng-model="chatText" ng-minlength="2" ng-required="true">
-      </label>
-      <button class="button button-clear" ng-click="sendChat(chatText); chatText = null" ng-disabled="chatForm.$invalid">
-        Send
-      </button>
+      <form name="chatForm" style="display:inline-flex; width:100%;">
+        <label class="item-input-wrapper">
+          <input  type="text" placeholder="Type a message" ng-model="chatText" ng-minlength="2" ng-required="true">
+        </label>
+        <button class="button button-clear" ng-click="sendChat(chatText); chatText = null" ng-disabled="chatForm.$invalid">
+          Send
+        </button>
+      </form>
     </ion-footer-bar>
-  </form>
 </ion-view>
