@@ -10,6 +10,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services',
 'starter.utils', 'starter.auth'
 ])
 
+.constant("ASSET_ID", "La49452EhmPBN8jJTN3BnbmJicJ8DihZX7k3DS") // for colu api
+
 .run(function($ionicPlatform, Auth, $rootScope, $state, $ionicHistory, Users, Loading) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
