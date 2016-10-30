@@ -232,10 +232,60 @@ angular.module('starter.services', [])
     all:messages
   };
 })
-.factory('Wallets', function($firebaseArray, $firebaseObject, $q) {
+
+.factory('Wallets', function($firebaseArray, $firebaseObject, $http, $q,
+  ASSET_ID) {
+
   var ref = firebase.database().ref().child("wallets");
 
   return {
+    /**
+     * 対象ユーザーの wallet を作成する
+     * @param {String} userId
+     * @return {Promise} promise
+     **/
+    create: function(userId){
+      var deferred = $q.defer();
+
+      // 対象の user が wallet を所持しているか確認する
+      $firebaseArray(ref.child(userId)).$loaded(function(wallets){
+        if (wallets && wallets.length > 0) {
+          return deferred.reject('wallet is already exists');
+        }
+
+        // API を呼び出して wallet address を新規取得する
+        $http({
+          method: "POST",
+          url: "/colu_api/get_address"
+        })
+        .success(function(data, status, headers, config){
+          if (!data || data.status !== 'ok') {
+            deferred.reject('API response error.');
+          }
+
+          var addressId = data.address;
+
+          // wallet を作成する
+          $firebaseObject(ref.child(userId + '/' + addressId))
+          .$loaded(function(obj){
+            obj.amount = 0;
+            obj.assetId = ASSET_ID;
+            obj.$save().then(function() {
+              deferred.resolve(obj.$id);
+            }, function(error) {
+              console.log("Error:", error);
+              deferred.reject('Cannot create wallet.');
+            });
+          });
+
+        })
+        .error(function(data, status, headers, config){
+          deferred.reject('API server error.');
+        });
+      });
+
+      return deferred.promise;
+    },
     all: function(userId){
       return $firebaseArray(ref.child(userId));
     },
