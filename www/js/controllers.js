@@ -23,8 +23,10 @@ angular.module('starter.controllers', [])
 })
 
 .controller('ChatCtrl', function($scope, $stateParams, $rootScope,
-  Activities, Messages, Users,
+  $http, $ionicLoading,
+  Activities, Messages, ModalService, Users, Wallets,
   chat, messages, members, activity,
+  currentWallet, membersWallets,
   Loading, linkType) {
 
   // link of chat-detail
@@ -36,6 +38,10 @@ angular.module('starter.controllers', [])
 
   // chat members
   $scope.members = members;
+
+  // wallets
+  $scope.currentWallet = currentWallet;
+  $scope.membersWallets = membersWallets;
 
   // user send new message
   $scope.sendChat = function(chatText){
@@ -54,6 +60,78 @@ angular.module('starter.controllers', [])
 
   }
 
+  // asset の送付モーダル画面を開く
+  $scope.openAssetModal = function() {
+    ModalService
+      .init('templates/modal/send-asset.html', $scope)
+      .then(function(modal) {
+        modal.show();
+
+        // モーダル表示処理は先におこなって、
+        // その裏で currentWallet を最新の状態に更新する
+        Wallets.get($rootScope.currentUser.$id, $scope.currentWallet.$id)
+        .$loaded(function(wallet){
+          $scope.currentWallet = wallet;
+        });
+      });
+  };
+
+  // チャット内の相手 user にコインを送る
+  $scope.sendAsset = function(assetNumber){
+    // 財の送り元/先の Wallet
+    // FIXME: 決め打ちで0番目の要素を利用している
+    var fromWallet = $scope.currentWallet;
+    var toWallet = $scope.membersWallets[0];
+
+    if (fromWallet.assetId !== toWallet.assetId) {
+      console.error("Does not match assetId");
+      return;
+    }
+
+    var apiJsonData = {
+      fromAddress: fromWallet.$id,
+      toAddress: toWallet.$id,
+      amount: assetNumber,
+      assetId: fromWallet.assetId
+    };
+
+    $ionicLoading.show({
+      content: 'Loading',
+      animation: 'fade-in',
+      showBackdrop: true,
+      maxWidth: 200,
+      showDelay: 0
+    });
+
+    // TODO services に API を呼び出す処理を移行する
+    $http({
+      method: "POST",
+      url: "/colu_api/send_asset",
+      data: apiJsonData
+    })
+    .success(function(data, status, headers, config){
+      console.log("success");
+      console.log(data, status, headers, config);
+
+      $ionicLoading.hide();
+      $scope.sendChat(assetNumber + " コイン送金しました。");
+      $scope.closeModal();
+
+      Wallets.sendAsset(
+        apiJsonData.amount,
+        $rootScope.currentUser.$id,
+        apiJsonData.fromAddress,
+        $scope.members[1].$id,
+        apiJsonData.toAddress
+      );
+    })
+    .error(function(data, status, headers, config){
+      console.log("error");
+      console.log(data, status, headers, config);
+
+      $ionicLoading.hide();
+    });
+  };
 
 })
 
@@ -300,7 +378,9 @@ activity, members, Chats, Privates, $state, $rootScope) {
   }
 })
 
-.controller('AccountCtrl', function($scope, Auth) {
+.controller('AccountCtrl', function($scope, Auth, currentWallet) {
+  $scope.currentWallet = currentWallet;
+
   $scope.signOut = function (){
     return Auth.$signOut();
   };

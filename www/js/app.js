@@ -10,6 +10,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services',
 'starter.utils', 'starter.auth'
 ])
 
+.constant("ASSET_ID", "La49452EhmPBN8jJTN3BnbmJicJ8DihZX7k3DS") // for colu api
+
 .run(function($ionicPlatform, Auth, $rootScope, $state, $ionicHistory, Users, Loading) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -82,7 +84,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services',
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
+  $ionicConfigProvider
+  .tabs.position("bottom"); // Places them at the bottom for all OS
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
@@ -195,6 +199,29 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services',
           },
           'members': function(chat, Members){
             return Members.get(chat.$id).$loaded();
+          },
+          'currentWallet': function(auth, Wallets){
+            return Wallets.all(auth.uid).$loaded(function(wallets){
+              if (wallets && wallets.length > 0) {
+                // FIXME 2つ以上ある場合、決め打ちで最初の要素を current として利用している
+                return wallets[0];
+              } else {
+                return {};
+              }
+            });
+          },
+          'membersWallets': function(auth, members, Wallets){
+            var targetUserId;
+            members.some(function(member){
+              if (member.$id !== auth.uid) {
+                targetUserId = member.$id;
+                return true;
+              }
+            });
+
+            return Wallets.all(targetUserId).$loaded(function(wallets){
+              return wallets;
+            });
           },
           'activity': function(auth, chat, Activities, Users, $stateParams){
             return Activities.get(auth.uid, chat.$id).$loaded(function(activity){
@@ -342,7 +369,19 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services',
     views: {
       'tab-account': {
         templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
+        controller: 'AccountCtrl',
+        resolve: {
+          'currentWallet': function(auth, Wallets){
+            return Wallets.all(auth.uid).$loaded(function(wallets){
+              if (wallets && wallets.length > 0) {
+                // FIXME 2つ以上ある場合、決め打ちで最初の要素を current として利用している
+                return wallets[0];
+              } else {
+                return {};
+              }
+            });
+          }
+        }
       }
     }
   });

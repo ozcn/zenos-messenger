@@ -1,0 +1,26 @@
+<ion-modal-view>
+  <ion-header-bar class="bar-stable">
+      <h1 class="title">コインを送る</h1>
+      <button class="button button-clear button-positive" ng-click="closeModal()">Cancel</button>
+  </ion-header-bar>
+  <ion-content>
+    <div class="text-center">
+      <div style="height: 10px"></div>
+      <h4>現在の所持金 {{currentWallet.amount || '-'}} コイン</h4>
+    </div>
+
+    <form name="assetForm">
+      <div class="list list-inset">
+        <label class="item item-input">
+          <input type="number" placeholder="コインの額を入力してください" ng-model="assetNumber" ng-required="true">
+        </label>
+      </div>
+
+      <div class="padding">
+        <button class="button button-block button-positive" ng-click="sendAsset(assetNumber); assetNumber = null" ng-disabled="assetForm.$invalid">
+          送金
+        </button>
+      </div>
+    </form>
+  </ion-content>
+</ion-modal-view>

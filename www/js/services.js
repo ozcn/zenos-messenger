@@ -232,6 +232,104 @@ angular.module('starter.services', [])
     all:messages
   };
 })
+
+.factory('Wallets', function($firebaseArray, $firebaseObject, $http, $q,
+  ASSET_ID) {
+
+  var ref = firebase.database().ref().child("wallets");
+
+  return {
+    /**
+     * 対象ユーザーの wallet を作成する
+     * @param {String} userId
+     * @return {Promise} promise
+     **/
+    create: function(userId){
+      var deferred = $q.defer();
+
+      // 対象の user が wallet を所持しているか確認する
+      $firebaseArray(ref.child(userId)).$loaded(function(wallets){
+        if (wallets && wallets.length > 0) {
+          return deferred.reject('wallet is already exists');
+        }
+
+        // API を呼び出して wallet address を新規取得する
+        $http({
+          method: "POST",
+          url: "/colu_api/get_address"
+        })
+        .success(function(data, status, headers, config){
+          if (!data || data.status !== 'ok') {
+            deferred.reject('API response error.');
+          }
+
+          var addressId = data.address;
+
+          // wallet を作成する
+          $firebaseObject(ref.child(userId + '/' + addressId))
+          .$loaded(function(obj){
+            obj.amount = 0;
+            obj.assetId = ASSET_ID;
+            obj.$save().then(function() {
+              deferred.resolve(obj.$id);
+            }, function(error) {
+              console.log("Error:", error);
+              deferred.reject('Cannot create wallet.');
+            });
+          });
+
+        })
+        .error(function(data, status, headers, config){
+          deferred.reject('API server error.');
+        });
+      });
+
+      return deferred.promise;
+    },
+    all: function(userId){
+      return $firebaseArray(ref.child(userId));
+    },
+    get: function(userId, walletAddressId){
+      return $firebaseObject(ref.child(userId + '/' + walletAddressId));
+    },
+    /**
+     * 対象ユーザーへ送金する
+     * @param {Number} amount 送金額
+     * @param {String} fromUserId 送金元の user id
+     * @param {String} fromWalletId 送金元の wallet id
+     * @param {String} toUserId 送金先の user id
+     * @param {String} toWalletId 送金先の wallet id
+     **/
+    sendAsset: function(amount, fromUserId, fromWalletId, toUserId, toWalletId){
+      var deferred1 = $q.defer();
+      var deferred2 = $q.defer();
+
+      this.get(fromUserId, fromWalletId).$loaded()
+      .then(function(fromWallet){
+        fromWallet.amount -= amount;
+        console.log('fromWallet.amount', fromWallet.amount);
+        fromWallet.$save().then(function(){
+          deferred1.resolve(fromWallet);
+        });
+      });
+
+      this.get(toUserId, toWalletId).$loaded()
+      .then(function(toWallet){
+        toWallet.amount += amount;
+        console.log('toWallet.amount', toWallet.amount);
+        toWallet.$save().then(function(){
+          deferred2.resolve(toWallet);
+        });
+      });
+
+      return $q.all([
+        deferred1.promise,
+        deferred2.promise
+      ]);
+    }
+  };
+})
+
 .factory('toggleSelection', function() {
   // userObj: { id: 0, name: 'Venkman', face: 'img/venkman.jpg' }
   // selectedList: userObj list array
