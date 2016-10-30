@@ -82,7 +82,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services',
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
+  $ionicConfigProvider
+  .tabs.position("bottom"); // Places them at the bottom for all OS
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
