@@ -2,14 +2,30 @@ angular.module('starter.auth', [])
 .factory('Auth', function( $firebaseAuth ){
   return $firebaseAuth();
 })
-.controller('AuthCtrl', function($scope, Loading, Error, ModalService, $state, Auth, Users) {
+.controller('AuthCtrl', function($scope, Loading, Error, ModalService, $state,
+  Auth, Users, Wallets) {
+
   $scope.signIn = function (provider){
     Loading.show("Sign in with " + provider + "...");
 
     Auth.$signInWithPopup(provider).then(function(result) {
       console.log("Signed in as:", result.user.uid);
-      $state.go("tab.chats");
-      Loading.hide();
+      var goNextState = function(){
+        $state.go("tab.chats");
+        Loading.hide();
+      };
+
+      Wallets.create(result.user.uid).then(function(wid){
+        console.log("Wallet created. id: " + wid);
+        goNextState();
+      }).catch(function(error) {
+        if (error === "wallet is already exists") {
+          return goNextState();
+        }
+        Loading.hide();
+        console.error(error);
+        Error("9999", "会員登録に失敗しました。サポートにお問い合わせください。");
+      });
     }).catch(function(error) {
       console.error("Authentication failed:", error);
       Loading.hide();
@@ -42,9 +58,18 @@ angular.module('starter.auth', [])
           console.log(user);
           Users.setEmailUser(currentUser.uid, user.displayName, user.email).then(function(){
             console.log("User created with uid: " + currentUser.uid);
-            $scope.closeModal();
-            $state.go("tab.chats");
-            Loading.hide();
+
+            Wallets.create(currentUser.uid).then(function(wid){
+              console.log("Wallet created. id: " + wid);
+
+              $scope.closeModal();
+              $state.go("tab.chats");
+              Loading.hide();
+            }).catch(function(error) {
+              Loading.hide();
+              console.error(error);
+              Error("9999", "会員登録に失敗しました。サポートにお問い合わせください。");
+            });
           });
         }).catch(function(error) {
           Loading.hide();
