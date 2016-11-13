@@ -256,7 +256,7 @@ angular.module('starter.services', [])
         // API を呼び出して wallet address を新規取得する
         $http({
           method: "POST",
-          url: "/colu_api/get_address"
+          url: "https://zenos.herokuapp.com/get_address"
         })
         .success(function(data, status, headers, config){
           if (!data || data.status !== 'ok') {

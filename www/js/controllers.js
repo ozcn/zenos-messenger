@@ -106,7 +106,7 @@ angular.module('starter.controllers', [])
     // TODO services に API を呼び出す処理を移行する
     $http({
       method: "POST",
-      url: "/colu_api/send_asset",
+      url: "https://zenos.herokuapp.com/send_asset",
       data: apiJsonData
     })
     .success(function(data, status, headers, config){
