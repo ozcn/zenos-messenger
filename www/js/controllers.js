@@ -83,6 +83,15 @@ angular.module('starter.controllers', [])
     var fromWallet = $scope.currentWallet;
     var toWallet = $scope.membersWallets[0];
 
+    // 財の送り先 userId
+    var toUserId = null;
+    $scope.members.some(function(member){
+      if (member.$id !== $rootScope.currentUser.$id) {
+        toUserId = member.$id;
+        return true;
+      }
+    });
+
     if (fromWallet.assetId !== toWallet.assetId) {
       console.error("Does not match assetId");
       return;
@@ -121,7 +130,7 @@ angular.module('starter.controllers', [])
         apiJsonData.amount,
         $rootScope.currentUser.$id,
         apiJsonData.fromAddress,
-        $scope.members[1].$id,
+        toUserId,
         apiJsonData.toAddress
       );
     })
