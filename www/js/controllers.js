@@ -126,13 +126,18 @@ angular.module('starter.controllers', [])
       $scope.sendChat(assetNumber + " コイン送金しました。");
       $scope.closeModal();
 
+      // 先に Firebase DB だけ更新する
       Wallets.sendAsset(
         apiJsonData.amount,
         $rootScope.currentUser.$id,
         apiJsonData.fromAddress,
         toUserId,
         apiJsonData.toAddress
-      );
+      ).then(function(){
+        // 次に Firebase DB を API の最新データと同期する
+        Wallets.syncWithApi($rootScope.currentUser.$id);
+        Wallets.syncWithApi(toUserId);
+      });
     })
     .error(function(data, status, headers, config){
       console.log("error");
