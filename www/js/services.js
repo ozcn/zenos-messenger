@@ -286,6 +286,49 @@ angular.module('starter.services', [])
 
       return deferred.promise;
     },
+
+    /**
+     * 対象ユーザーの wallet を API の最新データと同期する
+     * @param {String} userId
+     * @return {Promise} promise
+     **/
+    syncWithApi: function(userId){
+      var deferred = $q.defer();
+
+      $firebaseArray(ref.child(userId)).$loaded(function(wallets){
+        if (!wallets || wallets.length === 0) {
+          return deferred.resolve({});
+        }
+
+        var apiJsonData = {
+          address: wallets[0].$id,
+          assetId: wallets[0].assetId
+        };
+
+        // wallet address の最新データを取得する
+        $http({
+          method: "POST",
+          url: "https://zenos.herokuapp.com/get_address_info",
+          data: apiJsonData
+        })
+        .success(function(data, status, headers, config){
+          if (!data || data.status !== 'ok') {
+            deferred.reject('API response error.');
+          }
+
+          wallets[0].amount = data.totalAmount;
+          wallets.$save(0).then(function(){
+            deferred.resolve(wallets[0]);
+          });
+        })
+        .error(function(data, status, headers, config){
+          deferred.reject('API server error.');
+        });
+      });
+
+      return deferred.promise;
+    },
+
     all: function(userId){
       return $firebaseArray(ref.child(userId));
     },

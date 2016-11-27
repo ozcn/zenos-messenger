@@ -374,6 +374,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services',
           'currentWallet': function(auth, Wallets){
             return Wallets.all(auth.uid).$loaded(function(wallets){
               if (wallets && wallets.length > 0) {
+                // API response が 5 sec ぐらい掛かって遅いので、
+                // background で API の最新データと同期するために呼び出す
+                Wallets.syncWithApi(auth.uid);
                 // FIXME 2つ以上ある場合、決め打ちで最初の要素を current として利用している
                 return wallets[0];
               } else {
