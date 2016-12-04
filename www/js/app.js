@@ -387,6 +387,20 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services',
         }
       }
     }
+  })
+  .state('tab.wallet', {
+    url: '/wallets/:walletId',
+    views: {
+      'tab-account': {
+        templateUrl: 'templates/wallet.html',
+        controller: 'WalletCtrl',
+        resolve: {
+          'walletId': function($stateParams){
+            return $stateParams.walletId;
+          }
+        }
+      }
+    }
   });
 
   // if none of the above states are matched, use this as the fallback
