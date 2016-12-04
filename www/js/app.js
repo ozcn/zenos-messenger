@@ -6,7 +6,7 @@
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services',
-'ngMessages', 'firebase', 'angular-md5', 'angularMoment', 
+'ngMessages', 'firebase', 'angular-md5', 'angularMoment', 'monospaced.qrcode',
 'starter.utils', 'starter.auth'
 ])
 
