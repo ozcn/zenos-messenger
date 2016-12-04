@@ -1,0 +1,15 @@
+<ion-view title="ウォレットアドレス" hide-tabs>
+  <ion-nav-bar class="bar-stable">
+    <ion-nav-back-button>
+    </ion-nav-back-button>
+  </ion-nav-bar>
+
+  <ion-content>
+    <div style="height: 50px"></div>
+    <div class="text-center">
+      <h4>私のウォレットアドレス：</h4>
+      <qrcode size="220" error-correction-level="L" data="{{walletId}}"></qrcode>
+      <p>{{walletId}}</p>
+    </div>
+  </ion-content>
+</ion-view>

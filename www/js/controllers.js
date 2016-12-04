@@ -398,4 +398,8 @@ activity, members, Chats, Privates, $state, $rootScope) {
   $scope.signOut = function (){
     return Auth.$signOut();
   };
+})
+
+.controller('WalletCtrl', function($scope, walletId) {
+  $scope.walletId = walletId;
 });
